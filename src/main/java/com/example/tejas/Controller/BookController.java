@@ -1,7 +1,6 @@
 package com.example.tejas.Controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,8 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("/api/books")
 public class BookController {
 	
-    private final BookService bookService = new BookService();
+	@Autowired
+    public BookService bookService;
 	
 	 @PostMapping("/add")
 	 public ResponseEntity<Void> addBook(@RequestBody Book book) {
