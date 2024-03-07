@@ -1,31 +1,33 @@
 package com.example.tejas.Service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.stereotype.Service;
 
 import com.example.tejas.Entity.Book;
+
+import org.springframework.stereotype.Service;
+
 @Service
 public class BookService {
 	
-    private String downStreamURL = "http://localhost:8080/books/";
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Value("${downstream.service.url}") // Fix the annotation typo here
+	private String downStreamURL = "http://localhost:9090/books";
     
-    @Value("$downstream.service.url")
 	public void setDownStreamURL(String downStreamURL) {
     	this.downStreamURL = downStreamURL;
     }
-    
-    
-    @Autowired
-    public RestTemplate restTemplate;
+   
+	// To get all the books
+	public Book getBookDetails(String bookId) {
+        return restTemplate.getForObject(downStreamURL + "/" + bookId, Book.class);
+	}
 
-//    @GetMapping("/{id}")
-//    public Book getBookDetails(@PathVariable int id, ) {
-//    	return restTemplate. 	
-    			
-    
-    public void addBook(Book book) {
-        restTemplate.postForObject(downStreamURL, book, Book.class);
-    }
+	// To add books
+	public Book addBook(Book book) {	
+		return restTemplate.postForObject(downStreamURL, book, Book.class);
+	}
 }
-	
